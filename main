@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Blueprint to Becoming Agent-Native</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            },
+            blueprint: {
+              bg: '#0a0f1d',
+              card: '#111827',
+              border: '#1f293d',
+              grid: '#1e293b',
+              accent: '#38bdf8',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Blueprint subtle background grid */
+    .blueprint-grid {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+    }
+    .blueprint-dots {
+      background-image: radial-gradient(rgba(99, 102, 241, 0.15) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    /* Flow animation connector */
+    @keyframes pulseLine {
+      0% { stroke-dashoffset: 40; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .flow-connector {
+      stroke-dasharray: 6 6;
+      animation: pulseLine 2s linear infinite;
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b1120;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #233554;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #38bdf8;
+    }
+  </style>
+</head>
+<body class="bg-[#0b1120] text-slate-100 font-sans min-h-screen blueprint-grid selection:bg-indigo-500 selection:text-white">
+
+  <!-- Top Navigation & Metrics Bar -->
+  <header class="sticky top-0 z-40 bg-[#0b1120]/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Title & Branding -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-sky-400 p-[2px] flex items-center justify-center shadow-lg shadow-indigo-500/20">
+          <div class="w-full h-full bg-[#0b1120] rounded-[10px] flex items-center justify-center">
+            <svg class="w-5 h-5 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-lg sm:text-xl font-bold tracking-tight text-white font-mono flex items-center gap-2">
+              AGENT-NATIVE ARCHITECTURE <span class="text-xs font-normal px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/30">WIREFRAME v3.0</span>
+            </h1>
+          </div>
+          <p class="text-xs text-slate-400">Interactive beginner-to-advanced roadmap for autonomous system operations</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions, Progress & Glossary -->
+      <div class="flex items-center space-x-3">
+        <!-- Progress Counter -->
+        <div class="hidden md:flex flex-col items-end mr-3">
+          <div class="text-xs text-slate-400 font-mono">JOURNEY COMPLETION</div>
+          <div class="flex items-center space-x-2 mt-1">
+            <div class="w-28 h-2 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+              <div id="progressBar" class="h-full bg-gradient-to-r from-sky-400 to-indigo-500 transition-all duration-300 w-0"></div>
+            </div>
+            <span id="progressText" class="text-xs font-mono font-semibold text-sky-400">0/15</span>
+          </div>
+        </div>
+
+        <button onclick="openGlossaryModal()" class="px-3.5 py-2 text-xs font-medium rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition flex items-center gap-1.5 shadow-sm">
+          <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          Newbie Glossary
+        </button>
+
+        <button onclick="resetProgress()" class="px-3 py-2 text-xs font-medium rounded-lg bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/40 transition">
+          Reset
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    
+    <!-- Wireframe Overview Banner -->
+    <div class="relative rounded-2xl bg-gradient-to-r from-slate-900 via-[#131b2e] to-slate-900 border border-sky-500/20 p-6 sm:p-8 overflow-hidden shadow-2xl">
+      <div class="absolute -right-16 -top-16 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="max-w-3xl space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-mono">
+            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+            BLUEPRINT PROTOCOL: WHAT IS "AGENT-NATIVE"?
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Stop pasting text into chatboxes. Design systems built <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">for AI workers</span>.
+          </h2>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            In traditional legacy business, humans perform all clicks, logic, and handoffs, using AI merely as a calculator or auto-complete. 
+            Becoming <strong>Agent-Native</strong> means structuring your databases, tools, permissions, and goals so autonomous AI agents can run end-to-end multi-step operations safely. 
+            <span class="text-sky-300 font-medium">Click on any juncture below to inspect what each step actually means in plain English.</span>
+          </p>
+        </div>
+
+        <!-- Mode Indicator / Quick Stats -->
+        <div class="grid grid-cols-2 gap-3 min-w-[260px] bg-slate-950/60 p-4 rounded-xl border border-slate-800 font-mono text-xs">
+          <div>
+            <span class="text-slate-500 block">TOTAL PHASES</span>
+            <span class="text-lg font-bold text-white">5 Milestones</span>
+          </div>
+          <div>
+            <span class="text-slate-500 block">CHECKPOINTS</span>
+            <span class="text-lg font-bold text-sky-400">15 Junctures</span>
+          </div>
+          <div>
+            <span class="text-slate-500 block">DIFFICULTY</span>
+            <span class="text-emerald-400 font-medium">Zero-to-Hero</span>
+          </div>
+          <div>
+            <span class="text-slate-500 block">INTERACTIONS</span>
+            <span class="text-indigo-400 font-medium">Modals + Quizzes</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter / Phase Selector -->
+      <div class="mt-6 pt-6 border-t border-slate-800/80 flex flex-wrap items-center gap-2">
+        <span class="text-xs text-slate-400 font-mono mr-2">QUICK JUMP:</span>
+        <button onclick="filterPhase('all')" class="phase-filter-btn active px-3 py-1.5 rounded-lg text-xs font-medium bg-sky-500 text-white shadow-sm transition" data-phase="all">All Phases</button>
+        <button onclick="filterPhase('phase1')" class="phase-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" data-phase="phase1">1. Mindset Shift</button>
+        <button onclick="filterPhase('phase2')" class="phase-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" data-phase="phase2">2. Tooling & Sandbox</button>
+        <button onclick="filterPhase('phase3')" class="phase-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" data-phase="phase3">3. Multi-Agent Swarms</button>
+        <button onclick="filterPhase('phase4')" class="phase-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" data-phase="phase4">4. Guardrails & Trust</button>
+        <button onclick="filterPhase('phase5')" class="phase-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" data-phase="phase5">5. The Flywheel</button>
+      </div>
+    </div>
+
+    <!-- Blueprint Interactive Pipeline -->
+    <div id="pipelineContainer" class="space-y-12">
+      
+      <!-- PHASE 1: MINDSET & FOUNDATIONAL DATA ARCHITECTURE -->
+      <section id="phase1" class="phase-block transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-lg bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-mono font-bold text-sm">01</span>
+            <div>
+              <h3 class="text-lg font-bold text-white tracking-wide uppercase font-mono">Phase 1: Mindset Reorientation & Memory Foundation</h3>
+              <p class="text-xs text-slate-400">Moving away from conversational chat towards autonomous agency and unified knowledge stores.</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20 hidden sm:inline-block">FOUNDATION LAYER</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+          <!-- Juncture 1.1 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md relative" onclick="openStepModal('step1_1')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 1.1</span>
+              <span id="badge-step1_1" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              The "Chatbot" vs. "Agent" Shift
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">Why talking to an AI is not the same as letting an AI do actual work. Transition from reactive questions to autonomous delegated goals.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                Click to inspect
+              </span>
+              <span class="text-slate-500">Core Concept</span>
+            </div>
+          </div>
+
+          <!-- Juncture 1.2 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md relative" onclick="openStepModal('step1_2')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 1.2</span>
+              <span id="badge-step1_2" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Task Decomposition & Topology
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">Auditing workflows to map where probabilistic models outperform rigid rules and identifying where humans should step back.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                Click to inspect
+              </span>
+              <span class="text-slate-500">Mapping</span>
+            </div>
+          </div>
+
+          <!-- Juncture 1.3 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md relative" onclick="openStepModal('step1_3')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 1.3</span>
+              <span id="badge-step1_3" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Unified Dynamic Memory & Context
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">Equipping agents with long-term memory, vector stores, and episodic context so they don't develop amnesia between interactions.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                Click to inspect
+              </span>
+              <span class="text-slate-500">Storage</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHASE 2: TOOL REGISTRY & SANDBOX ENVIRONMENT -->
+      <section id="phase2" class="phase-block transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center font-mono font-bold text-sm">02</span>
+            <div>
+              <h3 class="text-lg font-bold text-white tracking-wide uppercase font-mono">Phase 2: Tool Registry & Execution Sandboxes</h3>
+              <p class="text-xs text-slate-400">Giving brains hands and eyes: hooking language models up to APIs, databases, and secure environments.</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono text-sky-400 bg-sky-500/10 px-3 py-1 rounded-full border border-sky-500/20 hidden sm:inline-block">CAPABILITY LAYER</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Juncture 2.1 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step2_1')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 2.1</span>
+              <span id="badge-step2_1" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              The Tool Registry & MCP Protocol
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">How agents discover and trigger external software (APIs, search, email, SQL) using standardized schema descriptions.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Integration</span>
+            </div>
+          </div>
+
+          <!-- Juncture 2.2 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step2_2')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 2.2</span>
+              <span id="badge-step2_2" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Isolated Execution Sandboxes
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">Containing rogue code or accidental database deletes. Micro-containers, virtual runtimes, and dry-run test passes.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Security</span>
+            </div>
+          </div>
+
+          <!-- Juncture 2.3 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step2_3')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 2.3</span>
+              <span id="badge-step2_3" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Deterministic Schema Contracts
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">Forcing AI outputs into strict structured formats (JSON Schema/Pydantic) so downstream software never crashes from unstructured conversational text.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Validation</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHASE 3: MULTI-AGENT SWARMS & ORCHESTRATION -->
+      <section id="phase3" class="phase-block transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-mono font-bold text-sm">03</span>
+            <div>
+              <h3 class="text-lg font-bold text-white tracking-wide uppercase font-mono">Phase 3: Multi-Agent Specialization & Swarms</h3>
+              <p class="text-xs text-slate-400">Moving past the "one giant agent" trap into specialized roles, peer reviews, and self-correcting loops.</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 hidden sm:inline-block">COORDINATION LAYER</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Juncture 3.1 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step3_1')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 3.1</span>
+              <span id="badge-step3_1" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Role Specialization (Planner vs. Worker)
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">Why one agent should never try to do everything. Splitting work across Planners, Synthesizers, Critics, and Verifiers.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Topology</span>
+            </div>
+          </div>
+
+          <!-- Juncture 3.2 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step3_2')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 3.2</span>
+              <span id="badge-step3_2" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Shared State & Message Busses
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">How multiple agents pass notes, debate plans, and update a unified "blackboard" without getting stuck in infinite loops.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Orchestration</span>
+            </div>
+          </div>
+
+          <!-- Juncture 3.3 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step3_3')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 3.3</span>
+              <span id="badge-step3_3" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Dynamic Replanning & Self-Healing
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">What happens when an external API fails? Giving agents reflection cycles to inspect error codes and try alternatives autonomously.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Resilience</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHASE 4: GUARDRAILS, HUMAN-IN-THE-LOOP & TRUST -->
+      <section id="phase4" class="phase-block transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center font-mono font-bold text-sm">04</span>
+            <div>
+              <h3 class="text-lg font-bold text-white tracking-wide uppercase font-mono">Phase 4: Calibrated Guardrails & Human-in-the-Loop</h3>
+              <p class="text-xs text-slate-400">Ensuring safety without strangling speed: stop rules, permission gates, and managerial accountability.</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20 hidden sm:inline-block">GOVERNANCE LAYER</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Juncture 4.1 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step4_1')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 4.1</span>
+              <span id="badge-step4_1" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Escalation Gates & Tiered Autonomy
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">Deciding what the agent does on its own (under $50) versus when it pauses and asks a human supervisor for 1-click confirmation.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">HITL Gate</span>
+            </div>
+          </div>
+
+          <!-- Juncture 4.2 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step4_2')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 4.2</span>
+              <span id="badge-step4_2" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Audit Trails & Deterministic Replay
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">Recording every step of reasoning, prompt version, tool call, and response to reproduce decisions for legal or compliance audits.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Auditability</span>
+            </div>
+          </div>
+
+          <!-- Juncture 4.3 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step4_3')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 4.3</span>
+              <span id="badge-step4_3" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Team Reskilling: Task-Doers to Directors
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">How human staff transition from typing data and emails to managing agent pipelines, checking edge cases, and steering outcomes.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Culture</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHASE 5: THE CONTINUOUS AGENT-NATIVE FLYWHEEL -->
+      <section id="phase5" class="phase-block transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center font-mono font-bold text-sm">05</span>
+            <div>
+              <h3 class="text-lg font-bold text-white tracking-wide uppercase font-mono">Phase 5: Evaluation & The Self-Improving Flywheel</h3>
+              <p class="text-xs text-slate-400">Continuous benchmarking, cost/latency triage across edge-cloud, and autonomous self-tuning workflows.</p>
+            </div>
+          </div>
+          <span class="text-xs font-mono text-purple-400 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/20 hidden sm:inline-block">SCALE LAYER</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Juncture 5.1 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step5_1')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 5.1</span>
+              <span id="badge-step5_1" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Synthetic Evals & Regression Testing
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">You can't improve what you don't measure. Running automated test suites of 500 edge cases every time prompts or tools change.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Evals</span>
+            </div>
+          </div>
+
+          <!-- Juncture 5.2 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step5_2')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 5.2</span>
+              <span id="badge-step5_2" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Hybrid Edge-Cloud Routing
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">Slashing token bills by 80%: resolving cheap routine queries with tiny fast models and saving massive frontier LLMs only for deep reasoning.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Efficiency</span>
+            </div>
+          </div>
+
+          <!-- Juncture 5.3 -->
+          <div class="wireframe-card group cursor-pointer bg-slate-900/80 hover:bg-slate-850 rounded-xl p-5 border border-slate-800 hover:border-sky-500/60 transition-all duration-200 shadow-md" onclick="openStepModal('step5_3')">
+            <div class="flex justify-between items-start mb-3">
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-950 text-sky-400 border border-sky-800">JUNCTURE 5.3</span>
+              <span id="badge-step5_3" class="status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Not Explored</span>
+            </div>
+            <h4 class="text-base font-bold text-white group-hover:text-sky-300 transition flex items-center justify-between">
+              Autonomous Tool Creation & Self-Evolution
+              <svg class="w-4 h-4 text-slate-500 group-hover:text-sky-400 transition" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </h4>
+            <p class="text-xs text-slate-400 mt-2 line-clamp-2">The ultimate agent-native horizon: agents noticing missing capabilities and drafting their own helper scripts to solve future tasks.</p>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+              <span class="text-sky-400 flex items-center gap-1">Click to inspect</span>
+              <span class="text-slate-500">Autonomous</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Pop-up Modal Container -->
+  <div id="stepModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/80 backdrop-blur-sm transition-all duration-200 flex items-center justify-center p-4">
+    <div id="modalContentWrapper" class="relative w-full max-w-3xl bg-[#0f172a] rounded-2xl border border-sky-500/30 shadow-2xl shadow-sky-500/10 overflow-hidden transform transition-all">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-5 bg-gradient-to-r from-slate-900 to-[#131e36] border-b border-slate-800 flex items-start justify-between">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span id="modalJunctureCode" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 border border-sky-500/30">JUNCTURE 1.1</span>
+            <span id="modalPhaseTag" class="text-xs font-mono text-slate-400">PHASE 1 &bull; FOUNDATION</span>
+          </div>
+          <h3 id="modalTitle" class="text-xl sm:text-2xl font-extrabold text-white mt-1">Step Title Goes Here</h3>
+        </div>
+        <button onclick="closeStepModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition">
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable) -->
+      <div class="px-6 py-6 space-y-6 max-h-[72vh] overflow-y-auto">
+        
+        <!-- The Newbie Analogy Box -->
+        <div class="p-4 rounded-xl bg-sky-950/30 border border-sky-500/30 flex items-start space-x-3.5">
+          <div class="text-2xl pt-0.5">💡</div>
+          <div>
+            <div class="text-xs font-mono uppercase tracking-wider text-sky-400 font-bold">The Newbie Analogy (Explain Like I'm 5)</div>
+            <p id="modalAnalogy" class="text-sm text-slate-200 mt-1 leading-relaxed">
+              Analogy text breaking down the concept using simple real-world metaphors.
+            </p>
+          </div>
+        </div>
+
+        <!-- The Shift (Old Way vs Agent-Native) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-rose-950/20 border border-rose-900/40">
+            <div class="flex items-center space-x-2 text-rose-400 text-xs font-mono font-bold uppercase mb-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              The Old Way (Legacy Human Bottleneck)
+            </div>
+            <p id="modalOldWay" class="text-xs text-slate-300 leading-normal">Description of traditional manual or naive chat prompting.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-emerald-950/20 border border-emerald-900/40">
+            <div class="flex items-center space-x-2 text-emerald-400 text-xs font-mono font-bold uppercase mb-2">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              The Agent-Native Way
+            </div>
+            <p id="modalNewWay" class="text-xs text-slate-300 leading-normal">Description of native agent architecture.</p>
+          </div>
+        </div>
+
+        <!-- Step-by-Step Implementation Guide -->
+        <div class="space-y-3">
+          <div class="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            What You Actually Build (Action Steps)
+          </div>
+          <div id="modalActionSteps" class="space-y-2 text-xs text-slate-300">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Common Pitfalls & Traps -->
+        <div class="p-3.5 rounded-lg bg-amber-950/20 border border-amber-900/40">
+          <div class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold flex items-center gap-1 mb-1">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            Beginner Pitfall to Avoid
+          </div>
+          <p id="modalPitfall" class="text-xs text-slate-300">Pitfall text explaining what newbies mess up.</p>
+        </div>
+
+        <!-- Interactive Quick Check (Mini-Quiz) -->
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="text-xs font-mono uppercase tracking-wider text-indigo-400 font-bold mb-2">
+            Quick Check: Test Your Instinct
+          </div>
+          <p id="modalQuizQuestion" class="text-xs text-slate-200 font-medium mb-3">Quiz question goes here?</p>
+          <div id="modalQuizOptions" class="grid grid-cols-1 gap-2">
+            <!-- Dynamic buttons -->
+          </div>
+          <div id="modalQuizFeedback" class="mt-2 text-xs font-mono hidden"></div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-6 py-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between">
+        <button id="modalToggleCompleteBtn" onclick="toggleCurrentStepExplored()" class="px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-slate-950 transition shadow-sm">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span id="btnStatusText">Mark as Explored</span>
+        </button>
+        <button onclick="closeStepModal()" class="px-4 py-2 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+          Close Window (ESC)
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Glossary Modal -->
+  <div id="glossaryModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl bg-[#0f172a] rounded-2xl border border-sky-500/30 p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-bold text-white font-mono flex items-center gap-2">
+          📖 The Agent-Native Jargon Buster
+        </h3>
+        <button onclick="closeGlossaryModal()" class="text-slate-400 hover:text-white p-1 rounded-lg">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-300">
+        AI engineers love confusing acronyms. Here are the 6 foundational terms you need to know to speak "Agent-Native":
+      </p>
+
+      <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+          <div class="text-xs font-mono font-bold text-sky-400">1. Autonomous Agent</div>
+          <div class="text-xs text-slate-300 mt-1">An AI that is not merely waiting for human keystrokes. You give it a <em>high-level goal</em> (e.g., "Find and refund duplicate charges in Stripe"), and it decides which sub-steps and tools to run until the mission is finished.</div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+          <div class="text-xs font-mono font-bold text-sky-400">2. Tool Calling / Function Calling</div>
+          <div class="text-xs text-slate-300 mt-1">Giving the AI hands. Instead of writing poetic paragraphs, the model outputs structured commands (like calling an API or running a SQL query) that an external program executes on its behalf.</div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+          <div class="text-xs font-mono font-bold text-sky-400">3. MCP (Model Context Protocol)</div>
+          <div class="text-xs text-slate-300 mt-1">An open standard created by Anthropic that acts like a universal USB plug for AI. Any software that exposes an MCP server allows any AI agent to automatically read its files, search its data, or click its buttons without bespoke code.</div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+          <div class="text-xs font-mono font-bold text-sky-400">4. HITL (Human-in-the-Loop)</div>
+          <div class="text-xs text-slate-300 mt-1">A safety architecture where the agent does all the heavy reading and planning, but pauses before high-stakes external actions (sending an invoice, deleting a server, transferring funds) to let a human click "Approve".</div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+          <div class="text-xs font-mono font-bold text-sky-400">5. Evals (Evaluations)</div>
+          <div class="text-xs text-slate-300 mt-1">Automated tests for probabilistic software. Instead of checking if code passes a simple unit test, an Eval suite runs 200 real-world customer problems through your agent to verify it doesn't hallucinate or leak private data.</div>
+        </div>
+
+        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+          <div class="text-xs font-mono font-bold text-sky-400">6. Multi-Agent Swarm</div>
+          <div class="text-xs text-slate-300 mt-1">A team of smaller, specialized AI agents working together (e.g., one writes code, another runs automated security tests, a third acts as a skeptical editor) rather than expecting a single prompt to do everything.</div>
+        </div>
+      </div>
+
+      <div class="pt-2 text-right">
+        <button onclick="closeGlossaryModal()" class="px-4 py-2 rounded-lg text-xs font-semibold bg-sky-500 text-slate-950 hover:bg-sky-400 transition">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Database of the 15 Junctures with newbie-friendly breakdowns
+    const JUNCTURES = {
+      step1_1: {
+        code: "JUNCTURE 1.1",
+        phaseTag: "PHASE 1 • MINDSET FOUNDATION",
+        title: "The 'Chatbot' vs. 'Agent' Paradigm Shift",
+        analogy: "Imagine hiring a contractor to paint your kitchen. The 'Chatbot' way is texting them every 2 minutes asking 'What color brush exists? Should I dip it?' The 'Agent' way is giving them the keys, the paint code, and saying 'Paint the kitchen, check with me if you need more than $100 for supplies, and text me when it's done.'",
+        oldWay: "Using AI like an interactive Google search. An employee types a prompt, gets a paragraph, copies it, pastes it into another app, and does all the physical work manually.",
+        newWay: "Delegating goal-oriented mandates. The agent receives a strategic outcome, plans the intermediate steps, calls APIs, and reports back on final completion.",
+        actionSteps: [
+          "Audit internal team usage: identify who is still copying/pasting between ChatGPT tabs and spreadsheets.",
+          "Shift prompt style from questions ('How do I calculate churn?') to objectives ('Calculate quarterly churn from Snowflake and generate the Slack digest').",
+          "Identify tasks that have clear start and end states suitable for full hand-off."
+        ],
+        pitfall: "Expecting an agent to work without giving it a structured goal. Vague instructions like 'make customer service better' will cause infinite loops or hallucinations.",
+        quiz: {
+          question: "Which of these is an example of an 'Agent-Native' prompt?",
+          options: [
+            { text: "Can you write an email explaining our refund policy?", correct: false },
+            { text: "Inspect ticket #4192, verify the invoice in Stripe, and if the refund is under $40, execute the refund and draft the user confirmation.", correct: true },
+            { text: "What are some best practices for customer satisfaction?", correct: false }
+          ],
+          explanation: "Agents are given actionable goals with boundary criteria and tool permissions, not just requests for text."
+        }
+      },
+      step1_2: {
+        code: "JUNCTURE 1.2",
+        phaseTag: "PHASE 1 • MINDSET FOUNDATION",
+        title: "Task Decomposition & Topology Mapping",
+        analogy: "Think of an assembly line. If you give a robot a box of random metal and say 'build a sports car', it jams. But if you separate the line into chassis assembly, engine drop, and paint booth, each specialized station succeeds 100% of the time.",
+        oldWay: "Throwing an entire 20-page employee handbook or massive workflow into one giant context window and hoping the model gets every step right.",
+        newWay: "Mapping operational procedures into a Decision Graph: separating purely deterministic math/rules from probabilistic language reasoning.",
+        actionSteps: [
+          "Draft standard operating procedures (SOPs) into small, modular single-purpose steps.",
+          "Distinguish deterministic steps (e.g. calculating tax rate = use standard Python code) from probabilistic steps (e.g. evaluating customer sentiment = use LLM).",
+          "Create a visual flow diagram of inputs, logic gates, and outputs for your target workflow."
+        ],
+        pitfall: "Using an LLM for simple math or database lookups that a standard 2-line SQL query or Python script could do 1000x cheaper and with 0% error rate.",
+        quiz: {
+          question: "What is the best way to handle calculating sales tax in an agent workflow?",
+          options: [
+            { text: "Ask the LLM to guess the tax rate based on its training weights.", correct: false },
+            { text: "Route the calculation to a deterministic API or formula, letting the agent consume the verified result.", correct: true },
+            { text: "Have two LLMs debate what the tax rate should be.", correct: false }
+          ],
+          explanation: "Never use probabilistic language models for deterministic arithmetic when reliable code or tax APIs exist."
+        }
+      },
+      step1_3: {
+        code: "JUNCTURE 1.3",
+        phaseTag: "PHASE 1 • MINDSET FOUNDATION",
+        title: "Unified Dynamic Memory & Context Architecture",
+        analogy: "Imagine an assistant who gets amnesia every 10 minutes. Every time you walk in the room, you have to introduce yourself and re-explain your whole business. That is a raw LLM without a persistent memory architecture.",
+        oldWay: "Passing huge, expensive transcripts of entire conversation histories back and forth in every API call until you hit context window limits.",
+        newWay: "Building a three-tier memory architecture: Short-term (current session scratchpad), Episodic (what happened yesterday), and Semantic (company vector database).",
+        actionSteps: [
+          "Implement a Vector Database (like Pinecone, Qdrant, or pgvector) for institutional documentation.",
+          "Design a key-value entity cache for customer profile state and ongoing transaction parameters.",
+          "Institute automatic memory summarization after every completed workflow."
+        ],
+        pitfall: "Shoving raw, uncleaned HTML and irrelevant PDFs into a vector database, poisoning the agent's memory with outdated junk.",
+        quiz: {
+          question: "Why can't an enterprise agent just rely on the LLM's default context window?",
+          options: [
+            { text: "It is too expensive, slow, and forgets long-term interactions between sessions.", correct: true },
+            { text: "LLMs are illegal to use without a database.", correct: false },
+            { text: "Context windows can only hold 5 words at a time.", correct: false }
+          ],
+          explanation: "Context windows are ephemeral scratchpads; long-term organizational knowledge requires dedicated persistent vector and structured storage."
+        }
+      },
+      step2_1: {
+        code: "JUNCTURE 2.1",
+        phaseTag: "PHASE 2 • TOOL REGISTRY & SANDBOX",
+        title: "The Tool Registry & MCP Protocol",
+        analogy: "Think of an AI agent as a smartphone. Out of the box, it can only talk to you. The Tool Registry is like the App Store—it gives the phone camera apps, banking tools, and maps that it can tap into whenever needed.",
+        oldWay: "Hardcoding bespoke Python scripts with brittle regex parsers to connect a prompt to a database.",
+        newWay: "Using standard protocols like the Model Context Protocol (MCP) or JSON function calling schemas so models inspect tool descriptions and self-select the right tool.",
+        actionSteps: [
+          "Expose internal services as standardized JSON tool specifications with explicit docstrings.",
+          "Deploy an MCP server that grants agents unified access to Slack, GitHub, Jira, or Postgres.",
+          "Write crisp docstrings for every tool explaining exactly when and when NOT to call it."
+        ],
+        pitfall: "Vague tool descriptions. If a tool is called 'lookup_data' without clear parameters, the agent will guess blindly or call it incessantly.",
+        quiz: {
+          question: "What tells the AI model how and when to use an external tool?",
+          options: [
+            { text: "The model guesses randomly through trial and error.", correct: false },
+            { text: "A detailed JSON schema with explicit descriptions of the tool's purpose and arguments.", correct: true },
+            { text: "The physical color of the server rack.", correct: false }
+          ],
+          explanation: "Models read the textual documentation and schema arguments in the prompt to decide if an available tool fits the current goal."
+        }
+      },
+      step2_2: {
+        code: "JUNCTURE 2.2",
+        phaseTag: "PHASE 2 • TOOL REGISTRY & SANDBOX",
+        title: "Isolated Execution Sandboxes",
+        analogy: "When chemistry students test explosive reactions, they don't do it on the cafeteria table; they do it under a ventilated fume hood with safety glass. A sandbox is that fume hood for autonomous code.",
+        oldWay: "Letting an experimental agent run arbitrary shell commands or database operations directly on the live production server.",
+        newWay: "Running all agent-written code inside isolated micro-containers (Docker, WebAssembly, or E2B) with zero internet access to sensitive systems.",
+        actionSteps: [
+          "Deploy ephemeral microVMs or container sandboxes for running untrusted agent-generated code.",
+          "Configure read-only replica databases so agents can query business data without the ability to drop tables.",
+          "Enforce network egress firewalls to prevent data exfiltration."
+        ],
+        pitfall: "Giving an autonomous agent write-access API keys to production Stripe or AWS accounts without dry-run validation.",
+        quiz: {
+          question: "What is the primary danger of running agent scripts without a sandbox?",
+          options: [
+            { text: "The AI could accidentally delete production databases or consume unbounded server resources.", correct: true },
+            { text: "The code will run too fast for humans to read.", correct: false },
+            { text: "Sandboxes make the AI lose its personality.", correct: false }
+          ],
+          explanation: "Autonomous agents will make coding errors; sandboxes restrict the blast radius to throwaway containers."
+        }
+      },
+      step2_3: {
+        code: "JUNCTURE 2.3",
+        phaseTag: "PHASE 2 • TOOL REGISTRY & SANDBOX",
+        title: "Deterministic Schema Contracts",
+        analogy: "If you order parts from a factory, you don't accept a handwritten poem describing the screw; you specify a blueprint with an exact 6mm thread. If the screw doesn't fit the gauge, it's rejected before it reaches the car.",
+        oldWay: "Accepting freeform conversational text from an LLM and hoping your downstream website doesn't crash when it formats a date wrong.",
+        newWay: "Using Structured Outputs (Pydantic / JSON Schema) enforced at the token level by the inference engine.",
+        actionSteps: [
+          "Define exact schema models for all agent outputs (fields, types, required keys).",
+          "Turn on native JSON-mode or grammar-constrained sampling in your model provider API.",
+          "Implement automatic validation passes: if a schema fails, reject the payload and feed the error back to the agent."
+        ],
+        pitfall: "Relying purely on system prompt warnings like 'Please return valid JSON only!'. Models will still occasionally slip in conversational preambles.",
+        quiz: {
+          question: "Why are structured schema contracts essential in production agent systems?",
+          options: [
+            { text: "They make the AI respond faster by reducing vocabulary.", correct: false },
+            { text: "They guarantee the AI's response can be safely consumed by standard code without parsing errors.", correct: true },
+            { text: "They prevent the AI from needing electricity.", correct: false }
+          ],
+          explanation: "Downstream databases and web services require strict types; structured schemas eliminate parsing crashes."
+        }
+      },
+      step3_1: {
+        code: "JUNCTURE 3.1",
+        phaseTag: "PHASE 3 • MULTI-AGENT SWARMS",
+        title: "Role Specialization (Planner vs. Worker)",
+        analogy: "In a movie production, the director doesn't operate the camera, cook catering, and sew costumes all at once. The director plans the shots; specialized cinematographers, gaffers, and editors execute their specific craft.",
+        oldWay: "Giving one giant 10-page prompt to a single model instance and asking it to research, code, test, and deploy an entire feature alone.",
+        newWay: "Splitting duties into specialized agents: an Orchestrator/Planner who breaks down the problem, Worker agents who execute, and a Critic agent who checks for bugs.",
+        actionSteps: [
+          "Separate the 'Planner' agent (which creates a checklist of tasks) from the 'Worker' agents (which execute single tasks).",
+          "Give each specialized agent only the tools and context necessary for its specific job.",
+          "Add a dedicated 'Reviewer' or 'Auditor' agent whose only job is finding flaws in the workers' output."
+        ],
+        pitfall: "Context bloat. When an agent has 40 tools and a massive prompt, its reasoning degrades; specialization keeps context tight and focused.",
+        quiz: {
+          question: "What is the key benefit of separating the 'Planner' agent from the 'Worker' agents?",
+          options: [
+            { text: "It allows workers to stay laser-focused on specific sub-tasks without getting lost in the big picture.", correct: true },
+            { text: "It makes the model completely free to run.", correct: false },
+            { text: "It replaces the need for any human oversight forever.", correct: false }
+          ],
+          explanation: "Specialized roles prevent cognitive overload and allow dedicated evaluation of plans before costly execution begins."
+        }
+      },
+      step3_2: {
+        code: "JUNCTURE 3.2",
+        phaseTag: "PHASE 3 • MULTI-AGENT SWARMS",
+        title: "Shared State & Message Busses",
+        analogy: "Think of an operating room during surgery. The surgeons and nurses don't all scream over each other; they have a shared whiteboard showing patient stats, and instruments are handed off via clear verbal protocol.",
+        oldWay: "Letting agents chat back and forth in a messy group chat where messages get buried and they talk in endless circles.",
+        newWay: "Using a centralized 'Blackboard' or state graph (like LangGraph or temporal state machines) where agents inspect a clean, versioned source of truth.",
+        actionSteps: [
+          "Deploy a state management store (Redis or state machine engine) to track current workflow status.",
+          "Define explicit transition states (e.g. DRAFTING -> CODE_REVIEW -> SECURITY_AUDIT -> COMPLETE).",
+          "Implement loop limits (e.g. maximum 3 revision cycles before escalating to human)."
+        ],
+        pitfall: "The infinite review loop: Agent A writes code, Agent B critiques it, Agent A rewrites it slightly, and they loop 50 times burning hundreds of dollars in API credits.",
+        quiz: {
+          question: "How do you prevent two autonomous agents from arguing in an infinite loop?",
+          options: [
+            { text: "Turn off the internet.", correct: false },
+            { text: "Enforce strict state machines with hard loop-counters and escalation exit rules.", correct: true },
+            { text: "Ask the agents nicely in the prompt to stop repeating themselves.", correct: false }
+          ],
+          explanation: "Deterministic loop limits and state transitions guarantee that execution terminates or seeks human guidance."
+        }
+      },
+      step3_3: {
+        code: "JUNCTURE 3.3",
+        phaseTag: "PHASE 3 • MULTI-AGENT SWARMS",
+        title: "Dynamic Replanning & Self-Healing",
+        analogy: "When your GPS encounters a road closure due to construction, it doesn't give up and crash your car into a tree. It immediately announces 'Rerouting' and finds an alternate bridge.",
+        oldWay: "A workflow crashes completely if an API returns a 500 error or a website changes its HTML layout.",
+        newWay: "Equipping agents with a reflection loop: when an error occurs, the agent reads the error stack trace, adjusts its plan, and tries an alternate tool.",
+        actionSteps: [
+          "Format raw error exceptions into the agent's observation stream (e.g. 'Status 404: User not found in DB').",
+          "Prompt the agent with self-correction instructions: 'If a tool returns an error, analyze the failure reason and select an alternate approach.'",
+          "Maintain a rollback mechanism to undo previous tool calls if a sequence cannot be recovered."
+        ],
+        pitfall: "Letting an agent blindly retry the exact same failing tool call without changing its arguments.",
+        quiz: {
+          question: "What does an agent need to 'self-heal' after a tool fails?",
+          options: [
+            { text: "The full error message and a reflection cycle that lets it choose an alternate route.", correct: true },
+            { text: "More compute power and a reboot of the computer.", correct: false },
+            { text: "A longer conversational introduction.", correct: false }
+          ],
+          explanation: "Observing the exact failure message allows the agent to diagnose what went wrong and alter its parameters or strategy."
+        }
+      },
+      step4_1: {
+        code: "JUNCTURE 4.1",
+        phaseTag: "PHASE 4 • GUARDRAILS & TRUST",
+        title: "Escalation Gates & Tiered Autonomy",
+        analogy: "Junior bank tellers can deposit checks and issue $100 cash without asking anyone. But if a customer wants to withdraw $50,000, the teller must call the branch manager for an override key. That's tiered autonomy.",
+        oldWay: "All-or-nothing autonomy: either humans do every single keystroke manually, or the AI is given unchecked freedom to do anything.",
+        newWay: "Defining clear monetary, reputational, and data thresholds. Routine actions execute automatically; high-risk actions pause for 1-click human approval.",
+        actionSteps: [
+          "Classify all agent tools into Green (read-only/safe), Yellow (internal modifications), and Red (external money/destructive actions).",
+          "Build an interactive approval UI (Slack buttons or dashboard webhooks) for Red actions.",
+          "Implement time-out rules: if no human approves within 30 minutes, cleanly pause the job without corrupting state."
+        ],
+        pitfall: "Alert fatigue: requiring human sign-off on 50 mundane tasks an hour. Humans will start blindly clicking 'Approve' without reading.",
+        quiz: {
+          question: "Which of the following actions should almost certainly have a human escalation gate?",
+          options: [
+            { text: "Summarizing customer support tickets from yesterday.", correct: false },
+            { text: "Executing a $15,000 wire transfer or mass-deleting customer records.", correct: true },
+            { text: "Generating a draft reply to an email inquiry.", correct: false }
+          ],
+          explanation: "Destructive or high-liability actions must be gated by human verification to prevent catastrophic automated mistakes."
+        }
+      },
+      step4_2: {
+        code: "JUNCTURE 4.2",
+        phaseTag: "PHASE 4 • GUARDRAILS & TRUST",
+        title: "Audit Trails & Deterministic Replay",
+        analogy: "Airplane flight recorders ('Black Boxes') continuously log altitude, engine thrust, and cockpit voice audio. If an incident occurs, investigators don't guess what happened; they replay the telemetry step-by-step.",
+        oldWay: "Logging only the final answer on a screen. When something goes wrong, nobody knows why the model made the disastrous choice.",
+        newWay: "Full thought-trace logging: recording the exact prompt version, model seed, tool inputs, API outputs, and confidence score for every step.",
+        actionSteps: [
+          "Integrate an observability platform (like Langfuse, Arize Phoenix, or OpenTelemetry).",
+          "Store all trace logs in an immutable, searchable database with unique execution IDs.",
+          "Build a 'Replay Mode' where developers can re-run an exact failing run with the exact same recorded tool responses."
+        ],
+        pitfall: "Logging sensitive customer passwords or unredacted credit cards inside agent thought traces.",
+        quiz: {
+          question: "Why is deterministic trace logging required for enterprise AI compliance?",
+          options: [
+            { text: "To make sure the model has enough memory to run.", correct: false },
+            { text: "To enable post-mortem forensic audits explaining why an agent took a specific action.", correct: true },
+            { text: "To make the AI think faster during calculations.", correct: false }
+          ],
+          explanation: "Enterprise compliance and debugging require a complete audit trail of prompts, thoughts, and external tool calls."
+        }
+      },
+      step4_3: {
+        code: "JUNCTURE 4.3",
+        phaseTag: "PHASE 4 • GUARDRAILS & TRUST",
+        title: "Team Reskilling: Task-Doers to Directors",
+        analogy: "When construction companies transitioned from shovels to steam excavators, workers didn't disappear; they stopped digging by hand and learned how to steer high-powered hydraulics with joysticks.",
+        oldWay: "Fearing that AI will eliminate human jobs, while employees secretly use random ChatGPT prompts to complete daily paperwork.",
+        newWay: "Formalizing workforce roles as 'Agent Directors': humans review synthetic drafts, curate high-quality training examples, and handle complex edge cases.",
+        actionSteps: [
+          "Provide hands-on sandboxes where team members build their own workflow helpers.",
+          "Shift employee performance metrics from hours spent typing to accuracy of agent oversight and edge-case handling.",
+          "Foster a culture of transparency: reward employees who report agent errors rather than hiding them."
+        ],
+        pitfall: "Treating AI adoption as purely an IT/Software project without retraining middle management on how to delegate to autonomous systems.",
+        quiz: {
+          question: "How does the role of a customer support specialist change in an agent-native company?",
+          options: [
+            { text: "They are fired and replaced entirely by a computer.", correct: false },
+            { text: "They shift from typing repetitive answers to supervising agent conversations and handling nuanced human escalations.", correct: true },
+            { text: "They spend all day reading AI code line-by-line.", correct: false }
+          ],
+          explanation: "Humans move up the value chain: resolving complex empathetic issues and coaching agent systems on brand standards."
+        }
+      },
+      step5_1: {
+        code: "JUNCTURE 5.1",
+        phaseTag: "PHASE 5 • CONTINUOUS FLYWHEEL",
+        title: "Synthetic Evals & Regression Testing",
+        analogy: "Car manufacturers don't test seatbelts by waiting for a real customer to crash on the highway. They build crash-test dummies and simulate 1,000 rigorous lab impacts before a car ever leaves the factory.",
+        oldWay: "'Vibe checking' an agent: tweaking a prompt, testing it 2 times by hand, saying 'looks good to me!', and deploying to all customers.",
+        newWay: "Automated Evaluation pipelines (Evals): running a dataset of 500 gold-standard edge cases through the agent on every code commit.",
+        actionSteps: [
+          "Collect a benchmark dataset of real historical difficult customer queries and edge cases.",
+          "Use automated LLM-as-a-Judge and programmatic assertion tests to score accuracy, tone, and tool validity.",
+          "Block production deployments automatically if pass rates drop below 95% on the eval suite."
+        ],
+        pitfall: "Relying on generic public benchmarks (like MMLU) instead of building evals tailored to your company's proprietary data and rules.",
+        quiz: {
+          question: "What is an 'Eval' in the context of enterprise agents?",
+          options: [
+            { text: "A subjective opinion from the CEO.", correct: false },
+            { text: "A systematic, automated suite of test scenarios that measures model accuracy and boundary compliance.", correct: true },
+            { text: "A discount given by OpenAI on tokens.", correct: false }
+          ],
+          explanation: "Evals provide objective metrics to ensure prompts and tool tweaks don't cause silent performance regressions."
+        }
+      },
+      step5_2: {
+        code: "JUNCTURE 5.2",
+        phaseTag: "PHASE 5 • CONTINUOUS FLYWHEEL",
+        title: "Hybrid Edge-Cloud Routing",
+        analogy: "If you want a glass of tap water, you don't call an international courier to fly a bottle from France. You turn on the kitchen tap. Save the expensive international delivery for rare vintage wine.",
+        oldWay: "Sending every single tiny prompt (like 'Is this a question or a statement?') to a massive, slow, expensive flagship frontier model.",
+        newWay: "Dynamic model routing: small, lightning-fast models (SLMs) on local/edge servers handle classification and extraction; massive LLMs handle deep strategic reasoning.",
+        actionSteps: [
+          "Benchmark query complexity: classify incoming requests into routine (75%) vs. complex reasoning (25%).",
+          "Route routine queries to low-cost models (e.g. Llama 3.2 8B, Claude Haiku, or GPT-4o-mini).",
+          "Reserve frontier reasoning models (o3, Sonnet) exclusively for multi-step replanning and synthesis."
+        ],
+        pitfall: "Assuming bigger models are always better; smaller models often exhibit lower latency, zero rate-limit friction, and superior strict JSON compliance.",
+        quiz: {
+          question: "What is the primary benefit of hybrid edge-cloud routing in agent systems?",
+          options: [
+            { text: "It reduces runtime inference costs by 60–80% and drastically lowers response latency.", correct: true },
+            { text: "It eliminates the need for software code.", correct: false },
+            { text: "It lets the AI run when the computer is completely unplugged.", correct: false }
+          ],
+          explanation: "Routing routine tasks to lightweight models saves massive capital and delivers sub-second response times."
+        }
+      },
+      step5_3: {
+        code: "JUNCTURE 5.3",
+        phaseTag: "PHASE 5 • CONTINUOUS FLYWHEEL",
+        title: "Autonomous Tool Creation & Self-Evolution",
+        analogy: "Early humans made stone hand-axes. Then they used the axes to carve wooden handles, creating better hammers. Eventually, they built robotic machines that assemble microchips. Tools that create better tools.",
+        oldWay: "Human software engineers having to manually write a new API adapter every time a team wants an agent to touch a new software tool.",
+        newWay: "The agent recognizes a recurring task, drafts a clean Python function to automate it, runs tests in a sandbox, and registers it to its own Tool Registry.",
+        actionSteps: [
+          "Enable agents to write ephemeral utility scripts for high-frequency data conversions.",
+          "Subject self-generated tools to automated security linting and human architect approval before permanent registry addition.",
+          "Continuously refine system prompts using successful historical execution traces."
+        ],
+        pitfall: "Allowing agents to register self-created tools permanently without mandatory security sandboxing and human architectural review.",
+        quiz: {
+          question: "What marks the pinnacle of an agent-native company architecture?",
+          options: [
+            { text: "Replacing all employees with computers immediately.", correct: false },
+            { text: "A self-optimizing flywheel where agents discover efficiencies, generate reusable tools, and compound company capabilities safely.", correct: true },
+            { text: "Having the most expensive GPU cluster in the world.", correct: false }
+          ],
+          explanation: "The agent-native summit is a compounding capability engine where agents safely expand operational capacity with human guidance."
+        }
+      }
+    };
+
+    // Tracking state
+    let exploredSteps = new Set();
+    let currentActiveStepKey = null;
+
+    // Initialize state on load
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedProgress();
+      updateProgressDisplay();
+      
+      // Keyboard navigation (ESC to close modals)
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeStepModal();
+          closeGlossaryModal();
+        }
+      });
+
+      // Close modal on outside backdrop click
+      document.getElementById('stepModal').addEventListener('click', (e) => {
+        if (e.target.id === 'stepModal') {
+          closeStepModal();
+        }
+      });
+      document.getElementById('glossaryModal').addEventListener('click', (e) => {
+        if (e.target.id === 'glossaryModal') {
+          closeGlossaryModal();
+        }
+      });
+    });
+
+    // Step Modal opening
+    function openStepModal(stepKey) {
+      const stepData = JUNCTURES[stepKey];
+      if (!stepData) return;
+
+      currentActiveStepKey = stepKey;
+      
+      // Populate elements
+      document.getElementById('modalJunctureCode').innerText = stepData.code;
+      document.getElementById('modalPhaseTag').innerText = stepData.phaseTag;
+      document.getElementById('modalTitle').innerText = stepData.title;
+      document.getElementById('modalAnalogy').innerText = stepData.analogy;
+      document.getElementById('modalOldWay').innerText = stepData.oldWay;
+      document.getElementById('modalNewWay').innerText = stepData.newWay;
+      document.getElementById('modalPitfall').innerText = stepData.pitfall;
+
+      // Populate Action Steps
+      const stepsContainer = document.getElementById('modalActionSteps');
+      stepsContainer.innerHTML = '';
+      stepData.actionSteps.forEach((step, idx) => {
+        const item = document.createElement('div');
+        item.className = 'flex items-start space-x-2 bg-slate-950/40 p-2.5 rounded-lg border border-slate-800/80';
+        item.innerHTML = `
+          <span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 font-mono text-[10px] flex items-center justify-center flex-shrink-0 mt-0.5">${idx + 1}</span>
+          <span class="text-slate-300 leading-relaxed">${step}</span>
+        `;
+        stepsContainer.appendChild(item);
+      });
+
+      // Populate Quiz
+      document.getElementById('modalQuizQuestion').innerText = stepData.quiz.question;
+      const optionsContainer = document.getElementById('modalQuizOptions');
+      optionsContainer.innerHTML = '';
+      const feedbackEl = document.getElementById('modalQuizFeedback');
+      feedbackEl.className = 'mt-2 text-xs font-mono hidden';
+      feedbackEl.innerText = '';
+
+      stepData.quiz.options.forEach((opt) => {
+        const optBtn = document.createElement('button');
+        optBtn.className = 'w-full text-left p-2.5 rounded-lg text-xs bg-slate-950/60 hover:bg-slate-800 text-slate-200 border border-slate-800 transition flex items-center justify-between group';
+        optBtn.innerHTML = `
+          <span>${opt.text}</span>
+          <span class="text-slate-500 group-hover:text-sky-400 font-mono text-[10px]">Select</span>
+        `;
+        optBtn.onclick = () => evaluateQuizAnswer(opt.correct, stepData.quiz.explanation, optBtn);
+        optionsContainer.appendChild(optBtn);
+      });
+
+      // Update button state
+      updateModalButtonState();
+
+      // Show modal
+      const modal = document.getElementById('stepModal');
+      modal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function evaluateQuizAnswer(isCorrect, explanation, buttonElement) {
+      const feedback = document.getElementById('modalQuizFeedback');
+      const allButtons = document.getElementById('modalQuizOptions').querySelectorAll('button');
+      
+      allButtons.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-60');
+      });
+
+      feedback.classList.remove('hidden');
+      if (isCorrect) {
+        buttonElement.classList.remove('bg-slate-950/60', 'border-slate-800', 'opacity-60');
+        buttonElement.classList.add('bg-emerald-950/40', 'border-emerald-600', 'text-emerald-300');
+        feedback.className = 'mt-3 p-3 rounded-lg bg-emerald-950/30 border border-emerald-800/50 text-emerald-300 text-xs';
+        feedback.innerHTML = `<strong>Correct!</strong> ${explanation}`;
+        
+        // Auto-mark explored if passed quiz
+        if (!exploredSteps.has(currentActiveStepKey)) {
+          toggleCurrentStepExplored();
+        }
+      } else {
+        buttonElement.classList.remove('bg-slate-950/60', 'border-slate-800', 'opacity-60');
+        buttonElement.classList.add('bg-rose-950/40', 'border-rose-700', 'text-rose-300');
+        feedback.className = 'mt-3 p-3 rounded-lg bg-rose-950/30 border border-rose-800/50 text-rose-300 text-xs';
+        feedback.innerHTML = `<strong>Not quite.</strong> ${explanation}`;
+      }
+    }
+
+    function closeStepModal() {
+      const modal = document.getElementById('stepModal');
+      modal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+      currentActiveStepKey = null;
+    }
+
+    function toggleCurrentStepExplored() {
+      if (!currentActiveStepKey) return;
+      
+      if (exploredSteps.has(currentActiveStepKey)) {
+        exploredSteps.delete(currentActiveStepKey);
+      } else {
+        exploredSteps.add(currentActiveStepKey);
+      }
+
+      saveProgress();
+      updateProgressDisplay();
+      updateModalButtonState();
+      updateBadgeUI(currentActiveStepKey);
+    }
+
+    function updateModalButtonState() {
+      const btn = document.getElementById('modalToggleCompleteBtn');
+      const btnText = document.getElementById('btnStatusText');
+      if (exploredSteps.has(currentActiveStepKey)) {
+        btn.className = 'px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 transition shadow-sm';
+        btnText.innerText = 'Completed (Click to Uncheck)';
+      } else {
+        btn.className = 'px-4 py-2 rounded-lg text-xs font-semibold font-mono flex items-center gap-2 bg-sky-500 hover:bg-sky-400 text-slate-950 transition shadow-sm';
+        btnText.innerText = 'Mark as Explored';
+      }
+    }
+
+    function updateBadgeUI(stepKey) {
+      const badge = document.getElementById(`badge-${stepKey}`);
+      if (!badge) return;
+
+      if (exploredSteps.has(stepKey)) {
+        badge.className = 'status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 flex items-center gap-1';
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Mastered`;
+      } else {
+        badge.className = 'status-pill text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400';
+        badge.innerText = 'Not Explored';
+      }
+    }
+
+    function updateProgressDisplay() {
+      const total = Object.keys(JUNCTURES).length;
+      const count = exploredSteps.size;
+      const pct = Math.round((count / total) * 100);
+
+      document.getElementById('progressBar').style.width = `${pct}%`;
+      document.getElementById('progressText').innerText = `${count}/${total} (${pct}%)`;
+
+      // Update all badges on board
+      Object.keys(JUNCTURES).forEach(stepKey => updateBadgeUI(stepKey));
+    }
+
+    function saveProgress() {
+      try {
+        localStorage.setItem('agent_native_explored', JSON.stringify(Array.from(exploredSteps)));
+      } catch (e) {
+        // Fallback for iFrame or disabled storage
+      }
+    }
+
+    function loadSavedProgress() {
+      try {
+        const saved = localStorage.getItem('agent_native_explored');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          exploredSteps = new Set(parsed);
+        }
+      } catch (e) {
+        exploredSteps = new Set();
+      }
+    }
+
+    function resetProgress() {
+      exploredSteps.clear();
+      saveProgress();
+      updateProgressDisplay();
+    }
+
+    // Glossary Modal Controls
+    function openGlossaryModal() {
+      document.getElementById('glossaryModal').classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeGlossaryModal() {
+      document.getElementById('glossaryModal').classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    // Filter by Phase
+    function filterPhase(phaseId) {
+      const buttons = document.querySelectorAll('.phase-filter-btn');
+      buttons.forEach(b => {
+        if (b.dataset.phase === phaseId) {
+          b.className = 'phase-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-sky-500 text-white shadow-sm transition';
+        } else {
+          b.className = 'phase-filter-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition';
+        }
+      });
+
+      const sections = document.querySelectorAll('.phase-block');
+      sections.forEach(sec => {
+        if (phaseId === 'all' || sec.id === phaseId) {
+          sec.classList.remove('hidden');
+        } else {
+          sec.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
